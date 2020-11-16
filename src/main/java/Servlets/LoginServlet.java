@@ -1,9 +1,6 @@
 package Servlets;
 
 
-import DAO.NotaDAO;
-import Java.Database;
-import Model.User;
 import Service.UserService;
 import Service.UserServiceImplementation;
 
@@ -13,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -33,13 +31,18 @@ public class LoginServlet extends HttpServlet {
         UserService us = new UserServiceImplementation();
 
         if (us.checkLogin(user, pass)) {
-            req.setAttribute("id",us.getUserId(user));
+
+            HttpSession session = req.getSession();
+
+            session.setAttribute("id",us.getUserId(user));
+
             RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/mainpage.jsp");
             dispatcher.forward(req, resp);
         } else {
             RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
             dispatcher.forward(req, resp);
         }
+
 
     }
 

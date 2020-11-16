@@ -1,10 +1,10 @@
 package DAO;
 
+import Model.Nota;
+
+import java.util.LinkedList;
+
 public interface DAONota {
-    boolean checkLogin(String username, String password);
-    void getUsers();
-    boolean checkUserExists(String username);
-    void createUser(String username, String password);
-    int getUserId(String username);
-    String getUsername(int id);
+    void createNota(String titulo, String text, int OwnerId, String creationDate);
+    LinkedList<Nota> getNotas(int ownerId);
 }

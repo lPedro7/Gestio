@@ -18,5 +18,8 @@
 <% String username = request.getParameter("username"); %>
 Bienvenido  <%= username %> !
 
+<p>Tus notas </p>
+<a href="/newNote">Nueva Nota +</a>
+
 </body>
 </html>

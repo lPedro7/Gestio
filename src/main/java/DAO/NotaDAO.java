@@ -1,136 +1,60 @@
 package DAO;
 
 import Java.Database;
+import Model.Nota;
+import com.google.common.hash.Hashing;
 
 import javax.xml.crypto.Data;
-import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class NotaDAO implements DAONota {
 
-
     @Override
-    public void getUsers() {
+    public void createNota(String title, String text, int OwnerId, String creationDate) {
 
-        Connection connection = Database.getConnection();
-        String url = "SELECT * FROM user";
         try {
+
+            Connection connection = Database.getConnection();
+            String url = "INSERT INTO nota(titulo,body,owner,creationDate) VALUES (?,?,?,?)";
             PreparedStatement preparedStatement = connection.prepareStatement(url);
-            preparedStatement.executeQuery();
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, text);
+            preparedStatement.setInt(3, OwnerId);
+            preparedStatement.setString(4, creationDate);
+
+            preparedStatement.executeUpdate();
             preparedStatement.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
 
-    @Override
-    public boolean checkLogin(String username, String password) {
-
-        try {
-            Connection connection = Database.getConnection();
-            String url = "SELECT * FROM user WHERE username = ? AND password = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(url);
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                preparedStatement.close();
-                rs.close();
-                return true;
-            }
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean checkUserExists(String username) {
-
-        try {
-            Connection connection = Database.getConnection();
-            String url = "SELECT * FROM user WHERE ? =username";
-            PreparedStatement preparedStatement = connection.prepareStatement(url);
-            preparedStatement.setString(1, username);
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                preparedStatement.close();
-                rs.close();
-                return true;
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return false;
     }
 
     @Override
-    public int getUserId(String username){
-        try {
+    public LinkedList<Nota> getNotas(int idOwner){
+        try{
             Connection connection = Database.getConnection();
-
-            String url = "SELECT * FROM user WHERE ? = username";
+            String url = "SELECT * FROM nota WHERE owner = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(url);
-            preparedStatement.setString(1, username);
-
+            preparedStatement.setInt(1,idOwner);
             ResultSet rs = preparedStatement.executeQuery();
 
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                preparedStatement.close();
-                rs.close();
-                return id;
+            LinkedList<Nota> notas = new LinkedList<Nota>();
+            while (rs.next()){
+                notas.push(new Nota(rs.getInt("id"),rs.getString("titulo"),rs.getString("text"),rs.getInt("owner"),rs.getString("creationDate")));
             }
+
+            return notas;
+
         }catch (Exception e){
             e.printStackTrace();
         }
-        return 0;
-    }
-
-    public void createUser(String username, String password){
-        try{
-            Connection connection = Database.getConnection();
-            String url = "INSERT INTO user(username,password) VALUES(?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(url);
-            preparedStatement.setString(1,username);
-            preparedStatement.setString(2,password);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        }catch (Exception e){
-            System.out.println("Exception " + e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public String getUsername(int id){
-
-        try{
-            Connection connection = Database.getConnection();
-            String url = "SELECT username FROM user WHERE id = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(url);
-            preparedStatement.setInt(1,id);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()){
-                String user = rs.getString(0);
-                rs.close();
-                preparedStatement.close();
-                return user;
-            }
-
-        }catch (Exception e){e.printStackTrace();}
-
-        return "Error";
+        return null;
     }
 }
