@@ -10,7 +10,7 @@ public class Database {
 
     public static Connection getConnection() {
         try {
-            String url = "jdbc:sqlite:C:\\Users\\Pedro\\Downloads\\sqlite-tools-win32-x86-3330000\\Gestion.db";
+            String url = "jdbc:sqlite:C:/Users/Pedro/IdeaProjects/Gestio/Gestion.db";
 
             if (connection == null) {
                 Class.forName("org.sqlite.JDBC");

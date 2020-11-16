@@ -10,14 +10,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Main Page</title>
 </head>
 <body>
 <h2>Post login! !</h2>
 
-<c:if test="${not empty username}">
-    Login correcto !!!!
-</c:if>
+<% String username = request.getParameter("username"); %>
+Bienvenido  <%= username %> !
 
 </body>
 </html>

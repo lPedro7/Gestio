@@ -13,9 +13,17 @@
 <body>
 
 <h1>Formulari de Registre</h1>
+<form action="/register" method="POST">
+    Usuari
+    <input type="text" name="username">
+    Contrasenya
+    <input type="password" name="password">
+    Repeteix la contrasenya
+    <input type="password" name="password1">
+    <button type="submit">Registrar</button>
 
-<form action="/registre" method="POST">
 
+    <a href="/login">Haz login !</a>
 </form>
 </body>
 </html>
